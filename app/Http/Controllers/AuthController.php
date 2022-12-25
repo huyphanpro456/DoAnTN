@@ -39,6 +39,7 @@ class AuthController extends Controller
                 $request->session()->flush();
                 return redirect()->back()->with('error','Địa chỉ email không tồn tại');
             }
+            var_dump(Auth::user());
 
             if (Auth::user()->status == 0){
                 return redirect()->back()->with('error','Tài khoản đang bị khóa');

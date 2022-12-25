@@ -70,9 +70,9 @@ class DeveloperController extends Controller
         $path='img/account/';
 
         if ($get_image){
-            if (file_exists($path.$account->image)){
-                unlink($path.$account->image);
-            }
+            // if (file_exists($path.$account->image)){
+            //     unlink($path.$account->image);
+            // }
 
             $get_name_image=$get_image->getClientOriginalName();
 

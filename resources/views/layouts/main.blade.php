@@ -543,7 +543,7 @@
 </script>
 
 {{-- Delete Exp --}}
-{{-- <script type="text/javascript">
+<script type="text/javascript">
     function deleteItems(id,$number) {
         var token = $('input[name="_token"]').val();
 
@@ -557,7 +557,7 @@
             }
         })
     }
-</script> --}}
+</script>
 
 {{-- <script type="text/javascript">
     $('.search__form-input > input').keyup(function () {
