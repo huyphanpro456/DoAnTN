@@ -179,7 +179,7 @@
                                     </a>
                                 </li>
                                 <li class="header__nav-user-item p-0">
-                                    <a href="" class="px-3 py-2">
+                                    <a href="{{route('save-post')}}" class="px-3 py-2">
                                         <i class="fa-solid fa-bookmark mr-2"></i>
                                         Việc đã lưu
                                     </a>
@@ -301,17 +301,17 @@
                 <p class="footer-text">Copyright &copy; IT DaNang</p>
                 <div class="footer__social">
                     <a
-                        href="https://www.facebook.com/profile.php?id=100008386385400"
+                        href="https://www.facebook.com/profile.php?id=100010340370648"
                         class="footer__social-link"
                         target="_blank"
                     >
                         <i class="fa-brands fa-facebook"></i>
                     </a>
-                    <a href="https://github.com/Vanthanh1320" class="footer__social-link">
+                    <a href="https://github.com/huyphanpro456" class="footer__social-link">
                         <i class="fa-brands fa-github"></i>
                     </a>
                     <a
-                        href="https://mail.google.com/mail/u/0/?tab=rm&ogbl#inbox"
+                        href="https://mail.google.com/mail/u/0/#inbox"
                         class="footer__social-link"
                     >
                         <i class="fa-solid fa-envelope"></i>
@@ -591,7 +591,7 @@
 </script> --}}
 
 {{-- Pagination --}}
-{{-- <script type="text/javascript">
+<script type="text/javascript">
     $(document).ready(function () {
         $(document).on('click','.pagination a',function (e) {
             e.preventDefault();
@@ -610,10 +610,10 @@
             }
         })
     }
-</script> --}}
+</script>
 
 {{-- Notify --}}
-{{-- <script type="text/javascript">
+<script type="text/javascript">
     const notifyElement=document.querySelector('.header__nav-notify');
 
     if (notifyElement){
@@ -645,6 +645,6 @@
         $('.header__nav-notify-list').remove();
 
     }
-</script > --}}
+</script>
 
 </html>

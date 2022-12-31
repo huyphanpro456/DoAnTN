@@ -46,8 +46,8 @@
 
 
     <div class="post-data">
-{{--        <a href="{{route('testMailAuto')}}">Test Mail</a>--}}
-        {{-- @include('developer.posts-more') --}}
+       {{-- <a href="{{route('testMailAuto')}}">Test Mail</a> --}}
+        @include('developer.posts-more')
     </div>
 
     <div class="container-lg">

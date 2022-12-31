@@ -31,6 +31,10 @@ Route::get('/', function () {
 Route::middleware(['auth'])->group(function () {
     Route::get('tai-khoan',[DeveloperController::class,'showAccount'])->name('show-account');
     Route::put('tao',[DeveloperController::class,'account'])->name('account');
+    Route::post('remove-notify',[DeveloperController::class,'removeNotify'])->name('remove-notify');
+
+    Route::post('apply',[DeveloperController::class,'apply'])->name('apply');
+    Route::get('viec-da-luu',[DeveloperController::class,'save_post'])->name('save-post');
 
     Route::post('tim-kiem',[DeveloperController::class,'search'])->name('search');
     Route::resource('/cv',ProfileController::class);
@@ -40,8 +44,37 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::get('/', [DeveloperController::class, 'index'])->name('developer');
+Route::get('tim-viec/{slug}',[DeveloperController::class,'post_info'])->name('show-post-info');
+
+Route::get('get-more-post',[DeveloperController::class,'getMorePost'])->name('get-more-post');
 
 Route::prefix('employer')->group(function (){
+    Route::middleware('empl')->group(function (){
+        Route::get('/', [EmployerController::class, 'index'])->name('empl');
+        Route::get('tai-khoan',[EmployerController::class,'showAccount'])->name('show-account-epl');
+        Route::put('update_account_employer',[EmployerController::class,'account'])->name('account-epl');
+
+        Route::post('remove-notify',[EmployerController::class,'removeNotify'])->name('remove-notify-empl');
+
+        Route::resource('/post',RecruitmentController::class);
+        Route::get('/update-status-post',[EmployerController::class,'statusPost'])->name('update-status-post');
+
+        Route::get('/update-status-candidate',[EmployerController::class,'statusCandidate'])->name('update-status-candidate');
+//        Route::get('/search-candidate',[EmployerController::class,'searchCandidate'])->name('search-candidate');
+        Route::get('/filer-status',[EmployerController::class,'filterStatus'])->name('filter-status');
+        Route::post('/xuat-excel',[EmployerController::class,'exportExcel'])->name('export-excel');
+
+        Route::get('/ung-vien',[EmployerController::class,'showCandidate'])->name('show-candidate');
+        Route::delete('/delete-candidate/{id}',[EmployerController::class,'deleteCandidate'])->name('delete-candidate');
+        Route::get('/sendMail',[EmployerController::class,'sendMail'])->name('send-mail');
+
+        Route::get('/thong-ke',[EmployerController::class,'showStatistic'])->name('show-statistic');
+        Route::post('/statistics-candidate',[EmployerController::class,'statisticsCandidate'])->name('statistics-candidate');
+
+
+        Route::get('logout',[AuthController::class,'logout'])->name('logout-emp');
+    });
+
 
     Route::get('login',[AuthController::class,'showFormLogin'])->name('show-login-emp');
     Route::post('login',[AuthController::class,'login'])->name('login-emp');

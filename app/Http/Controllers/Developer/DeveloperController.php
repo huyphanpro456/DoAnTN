@@ -35,8 +35,8 @@ class DeveloperController extends Controller
         $users_employer=User::where('account_type',3)->get();
         $date_now=Carbon::now()->toDateString();
         $posts=Recruitment::with('user')->where([['expire','>',$date_now],['status',1]])
-            ->orderBy('created_at','DESC')
-            ->paginate(6);
+        ->orderBy('created_at','DESC')
+        ->paginate(6);
 
         return view('developer.index')->with(compact('posts','users_employer','user'));
     }
@@ -90,4 +90,48 @@ class DeveloperController extends Controller
         return redirect()->back()->with('success','Cập nhập thành công');
     }
 
+    public function post_info($slug){
+        $user=$this->userId();
+
+        $post=Recruitment::with('user')->where('slug_title',$slug)->first();
+        $kills=explode(',',$post->kills);
+
+        $posts_same=Recruitment::with('user')
+            ->where(function ($query) use ($kills,$post){
+            for ($i=0;$i< count($kills);$i++) {
+                $query->orWhere('kills','like','%'.$kills[$i].'%')
+                    ->where('id','<>',$post->id)
+                    ->where([['expire','>',Carbon::now()->toDateString()],['status',1]]);
+            }
+        })->orderBy('created_at','DESC')->get();
+
+        if (Auth::user() != null){
+            $user_id=Auth::user()->id;
+
+            $profiles=Profile::where('user_id',$user_id)->orderBy('id','DESC')->get();
+            $apply=ApplyList::where('user_id',$user_id)->where('recruitment_id',$post->id)->where('status',0)->first();
+
+            return view('developer.post_info')->with(compact('post','kills','posts_same','profiles','apply','user'));
+        }else{
+            return view('developer.post_info')->with(compact('post','kills','posts_same','user'));
+
+        }
+    }
+
+    public function getMorePost(Request $request){
+        $date_now=Carbon::now()->toDateString();
+
+        if ($request->ajax()){
+            $posts=Recruitment::with('user')->where([['expire','>',$date_now],['status',1]])
+                ->orderBy('created_at','DESC')
+                ->paginate(6);
+            return view('developer.posts-more')->with(compact('posts'))->render();
+        }
+    }
+
+    public function save_post(){
+        $user=$this->userId();
+
+        return view('developer.save_post')->with(compact('user'));
+    }
 }
