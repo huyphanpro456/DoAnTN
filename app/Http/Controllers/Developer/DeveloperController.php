@@ -134,4 +134,150 @@ class DeveloperController extends Controller
 
         return view('developer.save_post')->with(compact('user'));
     }
+
+    public function apply(Request $request){
+
+        $data=$request->validate(
+            [
+                'recruitment_id' => ['required'],
+                'user_id' => [],
+                'name' => ['required'],
+                'email'=>['required','email'],
+                'phone_number'=>['required','numeric','min:11'],
+                'document'=>[],
+                'file'=>[],
+                'status'=>[],
+            ],
+            [
+                'name.required'=> 'Vui lòng nhập họ tên',
+                'email.required' => 'Vui lòng nhập email',
+                'email.email' => 'Email sai định dạng',
+                'phone_number.required'=>'Vui lòng nhập số điện thoại',
+                'phone_number.numeric'=> 'Số điện thoại định dạng là số',
+                'phone_number.min'=> 'Số điện thoại ít nhất là 10 ký tự',
+            ]
+        );
+
+        $apply=new ApplyList();
+        $apply->recruitment_id=$data['recruitment_id'];
+        $apply->name=$data['name'];
+        $apply->email=$data['email'];
+        $apply->phone_number=$data['phone_number'];
+        $apply->status=$data['status'];
+        $apply->created_at=Carbon::now('Asia/Ho_Chi_Minh');
+
+        $file=$request->file;
+        $document=$request->document;
+        if ($request->user_id != null){
+            $apply->user_id=$data['user_id'];
+        }
+        if ($document){
+            $apply->linkCV=$data['document'];
+        }
+        if($file){
+            $path='pdf-cv/';
+            $get_name_cv=$file->getClientOriginalName();
+
+            $name_cv=current(explode('.',$get_name_cv));
+            $new_cv=$name_cv.rand(0,99).'.'.$file->getClientOriginalExtension();
+            $file->move($path,$new_cv);
+
+            $apply->linkCV=$new_cv;
+        }
+
+        $apply->save();
+
+        //        Gửi Mail
+        // $user_developer=$this->userId();
+        // $post=Recruitment::find($request->recruitment_id);
+
+        // $mailable=new confirmProfile($user_developer,$post);
+        // Mail::to($user_developer->email)->queue($mailable);
+
+        //        Gửi thông báo
+        $desc=$request->name." đã ứng tuyển vào tin tuyển dụng của bạn";
+        $employer_id=User::where('id',(int)$request->employer_id)->first('id');
+
+        Notification::send($employer_id, new recruitmentNotify($desc));
+
+    //        Thống kê
+        $statisticapply=StatisticAplly::where('date_apply',Carbon::now()->toDateString())
+            ->where('recruitment_id',$data['recruitment_id'])
+            ->first();
+
+        if (isset($statisticapply)){
+            $statisticPost=StatisticAplly::find($statisticapply->id);
+            $statisticPost->quantity_apply+=1;
+            $statisticPost->save();
+        }else{
+            $statistic=new StatisticAplly();
+            $statistic->recruitment_id=$data['recruitment_id'];
+            $statistic->date_apply=Carbon::now()->toDateString();
+            $statistic->quantity_apply=1;
+            $statistic->quantity_browsing=0;
+            $statistic->save();
+        }
+
+        return redirect()->back()->with('success');
+    }
+
+    public function removeNotify(Request $request){
+        $id_notify=$request->id;
+        $user=User::find($id_notify);
+
+        $user->notifications()->delete();
+
+        return redirect()->back();
+    }
+
+    public function listRecruitment(){
+        $user=$this->userId();
+
+        return view('developer.recruitment_list')->with(compact('user'));
+    }
+
+    public function search(Request $request){
+        $user=$this->userId();
+        $date_now=Carbon::now()->toDateString();
+
+        $key=$request->key;
+        $select=$request->level;
+
+        if ($key){
+            $posts=Recruitment::with('user')
+                ->orwhere('kills','like','%'.$key.'%')
+                ->orwhere('name_company','like','%'.$key.'%')
+                ->orwhere('title','like','%'.$key.'%')
+                ->where([['expire','>',$date_now],['status',1]])
+                ->orderBy('created_at','DESC')->get();
+        }
+
+        if ($select !== "Chọn cấp bậc"){
+            $posts=Recruitment::with('user')
+                ->where('level','like','%'.$select.'%')
+                ->where([['expire','>',$date_now],['status',1]])
+                ->orderBy('created_at','DESC')->get();
+        }
+        // dd($posts);
+        return view('developer.search')->with(compact('posts','user'));
+    }
+
+    public function search_high(Request $request){
+        $key=$request->key;
+
+        if ($key){
+            $keywords=KeywordKills::where('name','like','%'.$key.'%')->orderBy('id','DESC')->get();
+
+            $output='<ul style="display: block; max-height: 145px;overflow-y: scroll">';
+
+            foreach ($keywords as $item){
+                $output.='
+                    <li class="keysword-list" style="padding: 5px"><a>'.$item->name.'</a></li>
+
+                ';
+            }
+            $output.='</ul>';
+            echo $output;
+        }
+    }
 }

@@ -185,7 +185,7 @@
                                     </a>
                                 </li>
                                 <li class="header__nav-user-item p-0">
-                                    <a href="" class="px-3 py-2">
+                                    <a href="{{route('recruitment-list')}}" class="px-3 py-2">
                                         <i class="fa-solid fa-square-check"></i>
                                         Việc ứng tuyển
                                     </a>

@@ -35,6 +35,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('apply',[DeveloperController::class,'apply'])->name('apply');
     Route::get('viec-da-luu',[DeveloperController::class,'save_post'])->name('save-post');
+    Route::get('viec-ung-tuyen',[DeveloperController::class,'listRecruitment'])->name('recruitment-list');
 
     Route::post('tim-kiem',[DeveloperController::class,'search'])->name('search');
     Route::resource('/cv',ProfileController::class);
