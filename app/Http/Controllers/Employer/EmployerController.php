@@ -27,7 +27,7 @@ class EmployerController extends Controller
     public function index(){
         if (Auth::check()){
             $user=$this->userId();
-//            dd($user->unreadNotifications);
+        //            dd($user->unreadNotifications);
             return view('employer.index')->with(compact('user'));
         }
 
@@ -163,7 +163,7 @@ class EmployerController extends Controller
     }
 
     public function statusCandidate(Request $request){
-//        dd($request->all());
+        //        dd($request->all());
         $id=$request->id;
         $user_developer=$request->user_developer;
         $value=$request->value;
@@ -176,8 +176,8 @@ class EmployerController extends Controller
         $apply->status=$value;
         $apply->save();
 
-//        dd($apply->recruitment_id);
-//        Cập nhập thống kê
+        //        dd($apply->recruitment_id);
+        //        Cập nhập thống kê
         $statisticApply=StatisticAplly::where('recruitment_id',$apply->recruitment_id)
             ->where('date_apply',Carbon::parse($apply->created_at)->toDateString())
             ->first();
@@ -204,7 +204,7 @@ class EmployerController extends Controller
             ->orderBy('id','DESC')
             ->get();
 
-//            dd($candidates);
+        //            dd($candidates);
 
         $html='';
         foreach ($candidates as $key=>$item){
@@ -233,11 +233,10 @@ class EmployerController extends Controller
         return response()->json($html);
     }
 
-    public function exportExcel(Request $request)
-    {
+    public function exportExcel(Request $request){
         $status= +$request->status;
 
-//        return (new ApplyExport)->download('apply_list.xlsx');
+        //        return (new ApplyExport)->download('apply_list.xlsx');
         return Excel::download(new ApplyExport($status), 'apply_list.xlsx');
     }
 
@@ -250,6 +249,7 @@ class EmployerController extends Controller
         $start_lastmouth=Carbon::now()->subMonth()->startOfMonth()->toDateString();
         $end_lastmouth=Carbon::now()->subMonth()->endOfMonth()->toDateString();
 
+        // dd($sub7days);
         switch ($request->timer){
             case 'ngayhomqua':
                 $apply_list=StatisticAplly::where('recruitment_id',$id_recruitment)
@@ -269,6 +269,7 @@ class EmployerController extends Controller
             default:
                 $apply_list=[];
         }
+        // var_dump($apply_list);
 
         if(count($apply_list) >0){
             foreach ($apply_list as $key => $val){
@@ -285,7 +286,7 @@ class EmployerController extends Controller
         }
 
 
-//        return view('employer.statistic')->with(compact('profileBrowsing','profileNotBrowsing'));
+        //        return view('employer.statistic')->with(compact('profileBrowsing','profileNotBrowsing'));
 
     }
 

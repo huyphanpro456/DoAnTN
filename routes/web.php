@@ -98,6 +98,7 @@ Route::prefix('adm')->group(function (){
         Route::post('/create-notice',[AdminController::class,'createNotice'])->name('create-notice');
 
         Route::get('logout',[AuthController::class,'logoutAdmin'])->name('logout-admin');
+        Route::get('/tai-khoan-nha-tuyen-dung',[AdminController::class,'showUserEmployer'])->name('show-user-employer');
 
     });
 

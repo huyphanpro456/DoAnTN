@@ -188,11 +188,11 @@ class DeveloperController extends Controller
         $apply->save();
 
         //        Gửi Mail
-        // $user_developer=$this->userId();
-        // $post=Recruitment::find($request->recruitment_id);
+        $user_developer=$this->userId();
+        $post=Recruitment::find($request->recruitment_id);
 
-        // $mailable=new confirmProfile($user_developer,$post);
-        // Mail::to($user_developer->email)->queue($mailable);
+        $mailable=new confirmProfile($user_developer,$post);
+        Mail::to($user_developer->email)->queue($mailable);
 
         //        Gửi thông báo
         $desc=$request->name." đã ứng tuyển vào tin tuyển dụng của bạn";
@@ -200,7 +200,7 @@ class DeveloperController extends Controller
 
         Notification::send($employer_id, new recruitmentNotify($desc));
 
-    //        Thống kê
+        //        Thống kê
         $statisticapply=StatisticAplly::where('date_apply',Carbon::now()->toDateString())
             ->where('recruitment_id',$data['recruitment_id'])
             ->first();
