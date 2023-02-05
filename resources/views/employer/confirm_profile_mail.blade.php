@@ -315,11 +315,11 @@
                     <div class="info-contact">
                         <ul class="info-contact-list">
                             <li class="info-contact-item">
-                                Nếu gặp khó khăn, bạn vui lòng liên hệ qua mail: <a href="">vothanh1320@gmail.com</a>
+                                Nếu gặp khó khăn, bạn vui lòng liên hệ qua mail: <a href="">huyphanpro456@gmail.com</a>
                             </li>
 
                             <li class="info-contact-item">
-                                Hoặc gọi số hotline: 0774794604 để được hỗ trợ
+                                Hoặc gọi số hotline: 0357668241 để được hỗ trợ
                             </li>
                         </ul>
                     </div>
